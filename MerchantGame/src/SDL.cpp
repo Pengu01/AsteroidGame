@@ -29,12 +29,19 @@ void SDL::GameLoop()
 {
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	registry reg;
+
 	mobility_system mob_sys;
 	sprite_system sprite_sys;
 	input_system input_sys;
-	reg.sprites[player] = { {0, 0, 32, 32}, LoadTexture("src/player.png") };
-	reg.movements[player] = { 0, 0, 500 };
+	velocity_system vel_sys;
+	rotation_system rot_sys;
+	tracking_system trk_sys;
+
+	reg.sprites[player] = { {0, 0, 32, 32}, LoadTexture("src/player.png"), 200 };
+	reg.velocities[player] = { 0, 0, 0.5f, 500 };
 	reg.inputs[player] = { 0, 0 };
+	reg.trackers[player] = { NULL, true };
+
 	while (!quit)
 	{
 		while (SDL_PollEvent(&e) != 0)
@@ -44,16 +51,20 @@ void SDL::GameLoop()
 			{
 				quit = true;
 			}
-			input_sys.update(reg, e, player);
+			input_sys.update(reg, e);
 		}
 		LAST = NOW;
 		NOW = SDL_GetTicks64();
 		deltaTime = (NOW - LAST) / 1000.0f;
-		//Clear screen
+
 		SDL_RenderClear(gRenderer);
+
+		vel_sys.update(reg, deltaTime);
 		mob_sys.update(reg, deltaTime);
+		trk_sys.update(reg, deltaTime);
+		rot_sys.update(reg, deltaTime);
 		sprite_sys.update(reg, gRenderer);
-		//Update screen
+
 		SDL_RenderPresent(gRenderer);
 	}
 	Close();

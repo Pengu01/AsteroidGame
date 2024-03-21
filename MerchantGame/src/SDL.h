@@ -14,6 +14,9 @@ struct registry
 	std::unordered_map<entity, sprite_component> sprites;
 	std::unordered_map<entity, movement_component> movements;
 	std::unordered_map<entity, input_component> inputs;
+	std::unordered_map<entity, velocity_component> velocities;
+	std::unordered_map<entity, rotation_component> rotations;
+	std::unordered_map<entity, tracking_component> trackers;
 };
 
 class SDL
