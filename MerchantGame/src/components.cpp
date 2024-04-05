@@ -19,10 +19,10 @@ struct movement_component
 	float speed;
 };
 
-struct input_component
+struct controller_component
 {
-	float input_x;
-	float input_y;
+	float controller_x;
+	float controller_y;
 };
 
 struct velocity_component
@@ -42,4 +42,22 @@ struct tracking_component
 {
 	entity target;
 	bool follow_mouse;
+};
+
+struct lifespan_component
+{
+	double lifespan;
+};
+
+struct collision_component
+{
+	char tag;
+};
+
+struct asteroid_component
+{
+	double spawn_timer;
+	double spawn_delay;
+	float vel_x, vel_y;
+	float width, height;
 };

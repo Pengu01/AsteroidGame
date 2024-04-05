@@ -18,6 +18,12 @@ struct mobility_system
 				continue;
 			}
 
+			if (reg.controllers.find(it.first) != reg.controllers.end())
+			{
+				it.second.vel_x = reg.controllers[it.first].controller_x;
+				it.second.vel_y = reg.controllers[it.first].controller_y;
+			}
+			
 			float tempX = it.second.vel_x;
 			float tempY = it.second.vel_y;
 
@@ -46,40 +52,46 @@ struct sprite_system
 	}
 };
 
-struct input_system
+struct controller_system
 {
 	void update(registry& reg, SDL_Event& e)
 	{
-		for (auto& it : reg.inputs)
+		for (auto& it : reg.controllers)
 		{
 			if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 			{
 				switch (e.key.keysym.sym)
 				{
-				case SDLK_UP: it.second.input_y--; break;
-				case SDLK_DOWN: it.second.input_y++; break;
+				case SDLK_UP: it.second.controller_y--; break;
+				case SDLK_w: it.second.controller_y--; break;
 
-				case SDLK_LEFT: it.second.input_x--; break;
-				case SDLK_RIGHT: it.second.input_x++; break;
+				case SDLK_DOWN: it.second.controller_y++; break;
+				case SDLK_s: it.second.controller_y++; break;
+
+				case SDLK_LEFT: it.second.controller_x--; break;
+				case SDLK_a: it.second.controller_x--; break;
+
+				case SDLK_RIGHT: it.second.controller_x++; break;
+				case SDLK_d: it.second.controller_x++; break;
 				}
 			}
 			else if (e.type == SDL_KEYUP && e.key.repeat == 0)
 			{
 				switch (e.key.keysym.sym)
 				{
-				case SDLK_UP: it.second.input_y++; break;
-				case SDLK_DOWN: it.second.input_y--; break;
+				case SDLK_UP: it.second.controller_y++; break;
+				case SDLK_w: it.second.controller_y++; break;
 
-				case SDLK_LEFT: it.second.input_x++; break;
-				case SDLK_RIGHT: it.second.input_x--; break;
+				case SDLK_DOWN: it.second.controller_y--; break;
+				case SDLK_s: it.second.controller_y--; break;
+
+				case SDLK_LEFT: it.second.controller_x++; break;
+				case SDLK_a: it.second.controller_x++; break;
+
+				case SDLK_RIGHT: it.second.controller_x--; break;
+				case SDLK_d: it.second.controller_x--; break;
 				}
 			}
-			if (reg.movements.find(it.first) == reg.movements.end())
-			{
-				continue;
-			}
-			reg.movements[it.first].vel_y = it.second.input_y;
-			reg.movements[it.first].vel_x = it.second.input_x;
 		}
 	}
 };
@@ -94,13 +106,13 @@ struct velocity_system
 			{
 				continue;
 			}
-			if (reg.inputs.find(it.first) == reg.inputs.end())
+			if (reg.controllers.find(it.first) == reg.controllers.end())
 			{
 				continue;
 			}
 
-			it.second.vel_x += reg.inputs[it.first].input_x * deltaTime * it.second.speed;
-			it.second.vel_y += reg.inputs[it.first].input_y * deltaTime * it.second.speed;
+			it.second.vel_x += reg.controllers[it.first].controller_x * deltaTime * it.second.speed;
+			it.second.vel_y += reg.controllers[it.first].controller_y * deltaTime * it.second.speed;
 
 			it.second.vel_x *= pow(it.second.drag, deltaTime);
 			it.second.vel_y *= pow(it.second.drag, deltaTime);
@@ -129,7 +141,7 @@ struct rotation_system
 
 struct tracking_system
 {
-	void update(registry& reg, double deltaTime)
+	void update(registry& reg)
 	{
 		for (auto& it : reg.trackers)
 		{
@@ -142,8 +154,7 @@ struct tracking_system
 				int mouse_x, mouse_y;
 				SDL_GetMouseState(&mouse_x, &mouse_y);
 
-				float angle_rad = atan2(mouse_y - reg.sprites[it.first].src.y, mouse_x - reg.sprites[it.first].src.x);
-				float angle_deg = angle_rad * 180.0 / M_PI;
+				float angle_deg = atan2(mouse_y - reg.sprites[it.first].src.y - reg.sprites[it.first].src.h / 2, mouse_x - reg.sprites[it.first].src.x - reg.sprites[it.first].src.w / 2) * 180.0 / M_PI;
 
 				reg.sprites[it.first].angle = angle_deg + 90;
 				continue;
@@ -152,10 +163,235 @@ struct tracking_system
 			{
 				continue;
 			}
-			double angle_rad = atan2(reg.sprites[it.second.target].src.y - reg.sprites[it.first].src.y, reg.sprites[it.second.target].src.x - reg.sprites[it.first].src.x);
-			double angle_deg = angle_rad * 180.0 / M_PI;
+			float angle_deg = atan2(reg.sprites[it.second.target].src.y + reg.sprites[it.second.target].src.h/2 - reg.sprites[it.first].src.y - reg.sprites[it.first].src.h / 2, reg.sprites[it.second.target].src.x + reg.sprites[it.second.target].src.w / 2 - reg.sprites[it.first].src.x - reg.sprites[it.first].src.w / 2) * 180.0 / M_PI;
 
-			reg.sprites[it.first].angle = angle_deg;
+			reg.sprites[it.first].angle = angle_deg + 90;
+		}
+	}
+};
+
+struct lifespan_system
+{
+	void update(registry& reg, double deltaTime)
+	{
+		for (auto it = reg.lifespans.begin(); it != reg.lifespans.end(); )
+		{
+			it->second.lifespan -= deltaTime;
+			if (it->second.lifespan <= 0)
+			{
+				if (reg.sprites.find(it->first) != reg.sprites.end())
+				{
+					reg.sprites.erase(it->first);
+				}
+				if (reg.movements.find(it->first) != reg.movements.end())
+				{
+					reg.movements.erase(it->first);
+				}
+				if (reg.controllers.find(it->first) != reg.controllers.end())
+				{
+					reg.controllers.erase(it->first);
+				}
+				if (reg.velocities.find(it->first) != reg.velocities.end())
+				{
+					reg.velocities.erase(it->first);
+				}
+				if (reg.rotations.find(it->first) != reg.rotations.end())
+				{
+					reg.rotations.erase(it->first);
+				}
+				if (reg.trackers.find(it->first) != reg.trackers.end())
+				{
+					reg.trackers.erase(it->first);
+				}
+				if (reg.collisions.find(it->first) != reg.collisions.end())
+				{
+					reg.collisions.erase(it->first);
+				}
+				it = reg.lifespans.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+};
+
+struct collision_system
+{
+	void update(registry& reg)
+	{
+		for (auto it1 = reg.collisions.begin(); it1 != reg.collisions.end(); )
+		{
+			if (reg.sprites.find(it1->first) == reg.sprites.end())
+			{
+				++it1;
+				continue;
+			}
+			for (auto it2 = reg.collisions.begin(); it2 != reg.collisions.end(); )
+			{
+				if (it1 == it2)
+				{
+					++it2;
+					continue;
+				}
+				if (reg.sprites.find(it2->first) == reg.sprites.end())
+				{
+					++it2;
+					continue;
+				}
+				if (!SDL_HasIntersectionF(&reg.sprites[it1->first].src, &reg.sprites[it2->first].src))
+				{
+					++it2;
+					continue;
+				}
+				switch (it1->second.tag)
+				{
+				case 'a':
+				{
+					if (it2->second.tag == 'p')
+					{
+						reg.lifespans[it2->first] = { 0 };
+					}
+					if (it2->second.tag == 'b')
+					{
+						reg.lifespans[it1->first] = { 0 };
+						reg.lifespans[it2->first] = { 0 };
+					}
+					break;
+				}
+				case 'p':
+				{
+					if (it2->second.tag == 'a')
+					{
+						reg.lifespans[it1->first] = { 0 };
+					}
+					break;
+				}
+				case 'b':
+				{
+					if (it2->second.tag == 'a')
+					{
+						reg.lifespans[it2->first] = { 0 };
+						reg.lifespans[it1->first] = { 0 };
+					}
+					break;
+				}
+				default:
+					break;
+				}
+				++it2;
+			}
+			++it1;
+		}
+	}
+};
+
+struct asteroid_system
+{
+	void update(registry& reg, double deltaTime, SDL& sdl)
+	{
+		for (auto& it : reg.asteroids)
+		{
+			it.second.spawn_timer -= deltaTime;
+			if (it.second.spawn_timer <= 0)
+			{
+				it.second.spawn_timer = it.second.spawn_delay;
+				entity asteroid = sdl.create_entity();
+				reg.collisions[asteroid] = { 'a' };
+				reg.sprites[asteroid] = 
+				{ 
+					{
+						(sdl.SCREEN_WIDTH / 2) - (((sdl.SCREEN_WIDTH / 2) + it.second.width) * it.second.vel_x) + ((rand() % (int)(1+it.second.vel_y * (sdl.SCREEN_WIDTH - it.second.width)))-((sdl.SCREEN_WIDTH/2)*abs(it.second.vel_y))), 
+						(sdl.SCREEN_HEIGHT / 2) - (((sdl.SCREEN_HEIGHT / 2) + it.second.height) * it.second.vel_y) + ((rand() % (int)(1+it.second.vel_x * (sdl.SCREEN_HEIGHT - it.second.height))) - ((sdl.SCREEN_HEIGHT / 2)*abs(it.second.vel_x))), 
+						it.second.width, 
+						it.second.height
+					}, 
+						sdl.textures[2], 
+						0
+				};
+				reg.movements[asteroid] = { it.second.vel_x,it.second.vel_y,200 };
+				reg.lifespans[asteroid] = { 5 };
+			}
+		}
+	}
+};
+
+struct input_system
+{
+	void update(registry& reg, entity player, SDL_Event& e, SDL& sdl)
+	{
+		if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
+		{
+			switch (e.key.keysym.sym)
+			{
+			case SDLK_LSHIFT:
+			{
+				if (reg.movements.find(player) == reg.movements.end())
+				{
+					if (reg.velocities.find(player) != reg.velocities.end())
+					{
+						reg.velocities.erase(player);
+						reg.movements[player] = { 0,0, 200 };
+						return;
+					}
+				}
+			}
+			case SDLK_SPACE:
+			{
+				if (reg.sprites.find(player) == reg.sprites.end())
+				{
+					return;
+				}
+				entity bullet = sdl.create_entity();
+				int mouse_x, mouse_y;
+				SDL_GetMouseState(&mouse_x, &mouse_y);
+				float delta_x = mouse_x - (reg.sprites[player].src.x + (reg.sprites[player].src.w / 2));
+				float delta_y = mouse_y - (reg.sprites[player].src.y + (reg.sprites[player].src.h / 2));
+				float angle_deg = atan2(delta_y, delta_x) * 180.0 / M_PI;
+				float diff = sqrt(pow(delta_x, 2) + pow(delta_y, 2));
+				if (diff != 0)
+				{
+					delta_x /= diff;
+					delta_y /= diff;
+				}
+				reg.sprites[bullet] = { {reg.sprites[player].src.x + (reg.sprites[player].src.w / 2) - 7,reg.sprites[player].src.y + (reg.sprites[player].src.h / 2) - 5.5f,14,11} ,sdl.textures[1], angle_deg + 90 };
+				reg.movements[bullet] = { delta_x, delta_y, 700 };
+				reg.lifespans[bullet] = { 1 };
+				reg.collisions[bullet] = { 'b' };
+			}
+
+			default:
+				return;
+			}
+		}
+		if (e.type == SDL_KEYUP && e.key.repeat == 0)
+		{
+			switch (e.key.keysym.sym)
+			{
+			case SDLK_LSHIFT:
+			{
+				if (reg.velocities.find(player) == reg.velocities.end())
+				{
+					if (reg.movements.find(player) != reg.movements.end())
+					{
+						float tempX = reg.movements[player].vel_x;
+						float tempY = reg.movements[player].vel_y;
+						float speed = reg.movements[player].speed;
+						float diff = sqrt(pow(tempX, 2) + pow(tempY, 2));
+
+						if (diff != 0)
+						{
+							tempX /= diff;
+							tempY /= diff;
+						}
+						reg.movements.erase(player);
+						reg.velocities[player] = { tempX * speed, tempY * speed, 0.5f, 600 };
+						return;
+					}
+				}
+			}
+			}
 		}
 	}
 };

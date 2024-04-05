@@ -9,7 +9,7 @@ bool SDL::Start()
 		printf(SDL_GetError());
 		return false;
 	}
-	gWindow = SDL_CreateWindow("BulletGame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow("AsteroidGame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == NULL)
 	{
 		printf(SDL_GetError());
@@ -28,19 +28,33 @@ bool SDL::Start()
 void SDL::GameLoop()
 {
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+	textures.push_back(LoadTexture("src/player.png"));
+	textures.push_back(LoadTexture("src/bullet.png"));
+	textures.push_back(LoadTexture("src/asteroid.png"));
+
 	registry reg;
 
-	mobility_system mob_sys;
+	mobility_system mobility_sys;
 	sprite_system sprite_sys;
+	controller_system controller_sys;
+	velocity_system velocity_sys;
+	rotation_system rotation_sys;
+	tracking_system tracking_sys;
+	lifespan_system lifespan_sys;
+	collision_system collision_sys;
+	asteroid_system asteroid_sys;
 	input_system input_sys;
-	velocity_system vel_sys;
-	rotation_system rot_sys;
-	tracking_system trk_sys;
 
-	reg.sprites[player] = { {0, 0, 32, 32}, LoadTexture("src/player.png"), 200 };
-	reg.velocities[player] = { 0, 0, 0.5f, 500 };
-	reg.inputs[player] = { 0, 0 };
+	reg.sprites[player] = { {0, 0, 52, 30}, textures[0], 200};
+	reg.velocities[player] = { 0, 0, 0.5f, 600 };
+	reg.controllers[player] = { 0, 0 };
 	reg.trackers[player] = { NULL, true };
+	reg.collisions[player] = { 'p' };
+	reg.asteroids[create_entity()] = { 2.0,2.0,1,0,40,40 };
+	reg.asteroids[create_entity()] = { 8.0,2.0,-1,0,40,40 };
+	reg.asteroids[create_entity()] = { 14.0,2.0,0,-1,40,40 };
+	reg.asteroids[create_entity()] = { 20.0,2.0,0,1,40,40 };
 
 	while (!quit)
 	{
@@ -51,18 +65,21 @@ void SDL::GameLoop()
 			{
 				quit = true;
 			}
-			input_sys.update(reg, e);
+			controller_sys.update(reg, e);
+			input_sys.update(reg, player, e, *this);
 		}
 		LAST = NOW;
 		NOW = SDL_GetTicks64();
-		deltaTime = (NOW - LAST) / 1000.0f;
+		deltaTime = (NOW - LAST) /1000.0;
 
 		SDL_RenderClear(gRenderer);
-
-		vel_sys.update(reg, deltaTime);
-		mob_sys.update(reg, deltaTime);
-		trk_sys.update(reg, deltaTime);
-		rot_sys.update(reg, deltaTime);
+		asteroid_sys.update(reg, deltaTime, *this);
+		velocity_sys.update(reg, deltaTime);
+		mobility_sys.update(reg, deltaTime);
+		collision_sys.update(reg);
+		lifespan_sys.update(reg, deltaTime);
+		tracking_sys.update(reg);
+		rotation_sys.update(reg, deltaTime);
 		sprite_sys.update(reg, gRenderer);
 
 		SDL_RenderPresent(gRenderer);
@@ -105,6 +122,5 @@ entity SDL::create_entity()
 {
 	static std::size_t entities = 0;
 	++entities;
-	max_entity = entities;
 	return entities;
 }
