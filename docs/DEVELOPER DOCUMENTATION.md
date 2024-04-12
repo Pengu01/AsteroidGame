@@ -73,11 +73,11 @@ This documentation provides an in-depth guide to the development of the Asteroid
 
 - ECS Architecture Class Diagram
 
-![image]("files:ECSArchitecture.png")
+![image](https://i.ibb.co/rxBfcn1/ECSArchitecture.png)
 
 - Gameloop Diagram
 
-![image]("files:Gameloop.png")
+![image](https://i.ibb.co/pdWSSww/Gameloop.png)
 
 ```yaml
 
