@@ -29,9 +29,9 @@ void SDL::GameLoop()
 {
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-	textures.push_back(LoadTexture("src/player.png"));
-	textures.push_back(LoadTexture("src/bullet.png"));
-	textures.push_back(LoadTexture("src/asteroid.png"));
+	textures.push_back(LoadTexture("../../assets/player.png"));
+	textures.push_back(LoadTexture("../../assets/bullet.png"));
+	textures.push_back(LoadTexture("../../assets/asteroid.png"));
 
 	registry reg;
 
@@ -46,15 +46,15 @@ void SDL::GameLoop()
 	asteroid_system asteroid_sys;
 	input_system input_sys;
 
-	reg.sprites[player] = { {0, 0, 52, 30}, textures[0], 200};
+	reg.sprites[player] = { {0, 0, 52, 30}, textures[0], 200 };
 	reg.velocities[player] = { 0, 0, 0.5f, 600 };
 	reg.controllers[player] = { 0, 0 };
 	reg.trackers[player] = { NULL, true };
 	reg.collisions[player] = { 'p' };
 	reg.asteroids[create_entity()] = { 2.0,2.0,1,0,40,40 };
-	reg.asteroids[create_entity()] = { 8.0,2.0,-1,0,40,40 };
-	reg.asteroids[create_entity()] = { 14.0,2.0,0,-1,40,40 };
-	reg.asteroids[create_entity()] = { 20.0,2.0,0,1,40,40 };
+	reg.asteroids[create_entity()] = { 5.0,1.5,-1,0,40,40 };
+	reg.asteroids[create_entity()] = { 7.0,2.0,0,-1,40,40 };
+	reg.asteroids[create_entity()] = { 10.0,1.5,0,1,40,40 };
 
 	while (!quit)
 	{
@@ -70,7 +70,7 @@ void SDL::GameLoop()
 		}
 		LAST = NOW;
 		NOW = SDL_GetTicks64();
-		deltaTime = (NOW - LAST) /1000.0;
+		deltaTime = (NOW - LAST) / 1000.0;
 
 		SDL_RenderClear(gRenderer);
 		asteroid_sys.update(reg, deltaTime, *this);
@@ -120,7 +120,7 @@ SDL_Texture* SDL::LoadTexture(std::string path)
 
 entity SDL::create_entity()
 {
-	static std::size_t entities = 0;
+	static entity entities = 0;
 	++entities;
 	return entities;
 }

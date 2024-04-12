@@ -7,6 +7,7 @@
 
 using entity = std::size_t;
 
+// mobility_system updates the position of entities based on their movement components
 struct mobility_system
 {
 	void update(registry& reg, double deltaTime)
@@ -23,7 +24,7 @@ struct mobility_system
 				it.second.vel_x = reg.controllers[it.first].controller_x;
 				it.second.vel_y = reg.controllers[it.first].controller_y;
 			}
-			
+
 			float tempX = it.second.vel_x;
 			float tempY = it.second.vel_y;
 
@@ -41,6 +42,7 @@ struct mobility_system
 	}
 };
 
+// sprite_system renders the sprites of entities
 struct sprite_system
 {
 	void update(registry& reg, SDL_Renderer* renderer)
@@ -52,6 +54,7 @@ struct sprite_system
 	}
 };
 
+// controller_system updates the controller components based on user input
 struct controller_system
 {
 	void update(registry& reg, SDL_Event& e)
@@ -96,6 +99,7 @@ struct controller_system
 	}
 };
 
+// velocity_system updates the position of entities based on their velocity components
 struct velocity_system
 {
 	void update(registry& reg, double deltaTime)
@@ -123,6 +127,7 @@ struct velocity_system
 	}
 };
 
+// rotation_system updates the rotation angle of entities
 struct rotation_system
 {
 	void update(registry& reg, double deltaTime)
@@ -139,6 +144,7 @@ struct rotation_system
 	}
 };
 
+// tracking_system updates the rotation angle of entities to track a target or the mouse
 struct tracking_system
 {
 	void update(registry& reg)
@@ -163,13 +169,14 @@ struct tracking_system
 			{
 				continue;
 			}
-			float angle_deg = atan2(reg.sprites[it.second.target].src.y + reg.sprites[it.second.target].src.h/2 - reg.sprites[it.first].src.y - reg.sprites[it.first].src.h / 2, reg.sprites[it.second.target].src.x + reg.sprites[it.second.target].src.w / 2 - reg.sprites[it.first].src.x - reg.sprites[it.first].src.w / 2) * 180.0 / M_PI;
+			float angle_deg = atan2(reg.sprites[it.second.target].src.y + reg.sprites[it.second.target].src.h / 2 - reg.sprites[it.first].src.y - reg.sprites[it.first].src.h / 2, reg.sprites[it.second.target].src.x + reg.sprites[it.second.target].src.w / 2 - reg.sprites[it.first].src.x - reg.sprites[it.first].src.w / 2) * 180.0 / M_PI;
 
 			reg.sprites[it.first].angle = angle_deg + 90;
 		}
 	}
 };
 
+// lifespan_system removes entities that have exceeded their lifespan
 struct lifespan_system
 {
 	void update(registry& reg, double deltaTime)
@@ -217,6 +224,7 @@ struct lifespan_system
 	}
 };
 
+// collision_system handles collisions between entities
 struct collision_system
 {
 	void update(registry& reg)
@@ -287,6 +295,7 @@ struct collision_system
 	}
 };
 
+// asteroid_system spawns asteroids at regular intervals
 struct asteroid_system
 {
 	void update(registry& reg, double deltaTime, SDL& sdl)
@@ -299,15 +308,15 @@ struct asteroid_system
 				it.second.spawn_timer = it.second.spawn_delay;
 				entity asteroid = sdl.create_entity();
 				reg.collisions[asteroid] = { 'a' };
-				reg.sprites[asteroid] = 
-				{ 
+				reg.sprites[asteroid] =
+				{
 					{
-						(sdl.SCREEN_WIDTH / 2) - (((sdl.SCREEN_WIDTH / 2) + it.second.width) * it.second.vel_x) + ((rand() % (int)(1+it.second.vel_y * (sdl.SCREEN_WIDTH - it.second.width)))-((sdl.SCREEN_WIDTH/2)*abs(it.second.vel_y))), 
-						(sdl.SCREEN_HEIGHT / 2) - (((sdl.SCREEN_HEIGHT / 2) + it.second.height) * it.second.vel_y) + ((rand() % (int)(1+it.second.vel_x * (sdl.SCREEN_HEIGHT - it.second.height))) - ((sdl.SCREEN_HEIGHT / 2)*abs(it.second.vel_x))), 
-						it.second.width, 
+						(sdl.SCREEN_WIDTH / 2) - (((sdl.SCREEN_WIDTH / 2) + it.second.width) * it.second.vel_x) + ((rand() % (int)(1 + it.second.vel_y * (sdl.SCREEN_WIDTH - it.second.width))) - ((sdl.SCREEN_WIDTH / 2) * abs(it.second.vel_y))),
+						(sdl.SCREEN_HEIGHT / 2) - (((sdl.SCREEN_HEIGHT / 2) + it.second.height) * it.second.vel_y) + ((rand() % (int)(1 + it.second.vel_x * (sdl.SCREEN_HEIGHT - it.second.height))) - ((sdl.SCREEN_HEIGHT / 2) * abs(it.second.vel_x))),
+						it.second.width,
 						it.second.height
-					}, 
-						sdl.textures[2], 
+					},
+						sdl.textures[2],
 						0
 				};
 				reg.movements[asteroid] = { it.second.vel_x,it.second.vel_y,200 };
@@ -317,6 +326,7 @@ struct asteroid_system
 	}
 };
 
+// input_system handles user input for player actions
 struct input_system
 {
 	void update(registry& reg, entity player, SDL_Event& e, SDL& sdl)

@@ -10,6 +10,7 @@
 
 using entity = std::size_t;
 
+// registry struct holds all the component data for entities
 struct registry
 {
 	std::unordered_map<entity, sprite_component> sprites;
@@ -23,6 +24,7 @@ struct registry
 	std::unordered_map<entity, asteroid_component> asteroids;
 };
 
+// SDL class represents the game window and handles the game loop
 class SDL
 {
 public:
@@ -35,13 +37,13 @@ public:
 	static const int SCREEN_WIDTH = 720;
 	static const int SCREEN_HEIGHT = 480;
 	entity create_entity();
-	//Start the window and game
+	// Initializes SDL and creates the game window
 	bool Start();
-	//gameloop
+	// Main game loop that updates and renders the game
 	void GameLoop();
-	//close and free
+	// Closes the game window and cleans up resources
 	void Close();
-	//load a texture
+	// Loads a texture from the specified path
 	SDL_Texture* LoadTexture(std::string path);
 	//Game window
 	SDL_Window* gWindow = NULL;
@@ -53,7 +55,7 @@ public:
 	SDL_Renderer* gRenderer = NULL;
 	//so that i can reuse textures
 	std::vector<SDL_Texture*> textures;
-
+	// Creates a new entity and returns its unique identifier
 	entity player = create_entity();
 private:
 };
