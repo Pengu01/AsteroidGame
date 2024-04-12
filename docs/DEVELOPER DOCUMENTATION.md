@@ -77,167 +77,167 @@ This documentation provides an in-depth guide to the development of the Asteroid
 
 Class: registry
 
-	Attributes:
+Attributes:
 
-	- sprites: unordered_map<entity, sprite_component>
+- sprites: unordered_map<entity, sprite_component>
 
-	- movements: unordered_map<entity, movement_component>
+- movements: unordered_map<entity, movement_component>
 
-	- controllers: unordered_map<entity, controller_component>
+- controllers: unordered_map<entity, controller_component>
 
-	- velocities: unordered_map<entity, velocity_component>
+- velocities: unordered_map<entity, velocity_component>
 
-	- rotations: unordered_map<entity, rotation_component>
+- rotations: unordered_map<entity, rotation_component>
 
-	- trackers: unordered_map<entity, tracking_component>
+- trackers: unordered_map<entity, tracking_component>
 
-	- lifespans: unordered_map<entity, lifespan_component>
+- lifespans: unordered_map<entity, lifespan_component>
 
-	- collisions: unordered_map<entity, collision_component>
+- collisions: unordered_map<entity, collision_component>
 
-	- asteroids: unordered_map<entity, asteroid_component>
+- asteroids: unordered_map<entity, asteroid_component>
 
 Class: sprite_component
 
-	Attributes:
+Attributes:
 
-	- src: SDL_FRect
+- src: SDL_FRect
 
-	- texture: SDL_Texture*
+- texture: SDL_Texture*
 
-	- angle: float
+- angle: float
 
 Class: movement_component
 
-	Attributes:
+Attributes:
 
-	- vel_x: float
+- vel_x: float
 
-	- vel_y: float
+- vel_y: float
 
-	- speed: float
+- speed: float
 
 Class: controller_component
 
-	Attributes:
+Attributes:
 
-	- controller_x: float
+- controller_x: float
 
-	- controller_y: float
+- controller_y: float
 
 Class: velocity_component
 
-	Attributes:
+Attributes:
 
-	- vel_x: float
+- vel_x: float
 
-	- vel_y: float
+- vel_y: float
 
-	- drag: float
+- drag: float
 
-	- speed: float
+- speed: float
 
 Class: rotation_component
 
-	Attributes:
+Attributes:
 
-	- deviation: float
+- deviation: float
 
 Class: tracking_component
 
-	Attributes:
+Attributes:
 
-	- target: entity
+- target: entity
 
-	- follow_mouse: bool
+- follow_mouse: bool
 
 Class: lifespan_component
 
-	Attributes:
+Attributes:
 
-	- lifespan: double
+- lifespan: double
 
 Class: collision_component
 
-	Attributes:
+Attributes:
 
-	- tag: char
+- tag: char
 
 Class: asteroid_component
 
-	Attributes:
+Attributes:
 
-	- spawn_timer: double
+- spawn_timer: double
 
-	- spawn_delay: double
+- spawn_delay: double
 
-	- vel_x: float
+- vel_x: float
 
-	- vel_y: float
+- vel_y: float
 
-	- width: float
+- width: float
 
-	- height: float
+- height: float
 
 Class: mobility_system
 
-	Methods:
+Methods:
 
-	- update(registry&, double): void
+- update(registry&, double): void
 
 Class: sprite_system
 
-	Methods:
+Methods:
 
-	- update(registry&, SDL_Renderer*): void
+- update(registry&, SDL_Renderer*): void
 
 Class: controller_system
 
-	Methods:
+Methods:
 
-	- update(registry&, SDL_Event&): void
+- update(registry&, SDL_Event&): void
 
 Class: velocity_system
 
-	Methods:
+Methods:
 
-	- update(registry&, double): void
+- update(registry&, double): void
 
 Class: rotation_system
 
-	Methods:
+Methods:
 
-	- update(registry&, double): void
+- update(registry&, double): void
 
 Class: tracking_system
 
-	Methods:
+Methods:
 
-	- update(registry&): void
+- update(registry&): void
 
 Class: lifespan_system
 
-	Methods:
+Methods:
 
-	- update(registry&, double): void
+- update(registry&, double): void
 	
 Class: collision_system
 
-	Methods:
+Methods:
 
-	- update(registry&): void
+- update(registry&): void
 
 Class: asteroid_system
 
-	Methods:
+Methods:
 
-	- update(registry&, double, SDL&): void
+- update(registry&, double, SDL&): void
 
 Class: input_system
 
-	Methods:
+Methods:
 
-	- update(registry&, entity, SDL_Event&, SDL&): void
+- update(registry&, entity, SDL_Event&, SDL&): void
 
 ```
 
