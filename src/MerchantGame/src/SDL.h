@@ -45,15 +45,15 @@ public:
 	void Close();
 	// Loads a texture from the specified path
 	SDL_Texture* LoadTexture(std::string path);
-	//Game window
+	// Game window
 	SDL_Window* gWindow = NULL;
-	//Surface of game window
+	// Surface of game window
 	SDL_Surface* gScreenSurface = NULL;
-	//Displayed game window surface
+	// Displayed game window surface
 	SDL_Surface* gCurrentSurface = NULL;
-	//Renderer
+	// Renderer
 	SDL_Renderer* gRenderer = NULL;
-	//so that i can reuse textures
+	// Vector containing the textures
 	std::vector<SDL_Texture*> textures;
 	// Creates a new entity and returns its unique identifier
 	entity player = create_entity();
