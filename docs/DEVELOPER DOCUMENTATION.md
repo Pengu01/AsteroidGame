@@ -311,6 +311,47 @@ Methods:
 
 - **Unit Testing**: Focus on testing individual components and systems.
 
+- **Two Examples of Integration/Functional Testing**
+
+1. Test the mobility_system:
+```cpp
+void test_mobility_system(registry& reg, double deltaTime) {
+    // Create a test entity with sprite and movement components
+    entity test_entity = 1;
+    reg.sprites[test_entity] = { {100, 100, 50, 50}, nullptr, 0 };
+    reg.movements[test_entity] = { 1, 1, 200 };
+
+    // Call the mobility_system update function
+    mobility_system mobility_sys;
+    mobility_sys.update(reg, deltaTime);
+
+    // Check if the sprite's position is updated correctly
+    assert(reg.sprites[test_entity].src.x == 100 + deltaTime * 200);
+    assert(reg.sprites[test_entity].src.y == 100 + deltaTime * 200);
+}
+```
+
+2. Test the collision_system:
+```cpp
+void test_collision_system(registry& reg) {
+    // Create test entities with sprite and collision components
+    entity test_entity1 = 1;
+    entity test_entity2 = 2;
+    reg.sprites[test_entity1] = { {100, 100, 50, 50}, nullptr, 0 };
+    reg.sprites[test_entity2] = { {120, 120, 50, 50}, nullptr, 0 };
+    reg.collisions[test_entity1] = { 'a' };
+    reg.collisions[test_entity2] = { 'b' };
+
+    // Call the collision_system update function
+    collision_system collision_sys;
+    collision_sys.update(reg);
+
+    // Check if the entities are destroyed correctly based on collision rules
+    assert(reg.lifespans.find(test_entity1) != reg.lifespans.end());
+    assert(reg.lifespans.find(test_entity2) != reg.lifespans.end());
+}
+```
+
 - **Integration Testing**: Assess the interplay between systems like `sprite_system` and `mobility_system`.
 
 - **End-User Functional Testing**:
