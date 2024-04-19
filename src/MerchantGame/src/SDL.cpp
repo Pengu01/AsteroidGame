@@ -27,14 +27,17 @@ bool SDL::Start()
 
 void SDL::GameLoop()
 {
+	//Sets background color
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
+	//Gets all textures
 	textures.push_back(LoadTexture("../../assets/player.png"));
 	textures.push_back(LoadTexture("../../assets/bullet.png"));
 	textures.push_back(LoadTexture("../../assets/asteroid.png"));
 
+	//Initializes registry
 	registry reg;
 
+	//Initialized all systems
 	mobility_system mobility_sys;
 	sprite_system sprite_sys;
 	controller_system controller_sys;
@@ -46,11 +49,14 @@ void SDL::GameLoop()
 	asteroid_system asteroid_sys;
 	input_system input_sys;
 
+	//Creates player entity
 	reg.sprites[player] = { {0, 0, 52, 30}, textures[0], 200 };
 	reg.velocities[player] = { 0, 0, 0.5f, 600 };
 	reg.controllers[player] = { 0, 0 };
 	reg.trackers[player] = { NULL, true };
 	reg.collisions[player] = { 'p' };
+
+	//Creates asteroid entiites
 	reg.asteroids[create_entity()] = { 2.0,2.0,1,0,40,40 };
 	reg.asteroids[create_entity()] = { 5.0,1.5,-1,0,40,40 };
 	reg.asteroids[create_entity()] = { 7.0,2.0,0,-1,40,40 };
@@ -68,11 +74,15 @@ void SDL::GameLoop()
 			controller_sys.update(reg, e);
 			input_sys.update(reg, player, e, *this);
 		}
+		//Calculates the time between frames
 		LAST = NOW;
 		NOW = SDL_GetTicks64();
 		deltaTime = (NOW - LAST) / 1000.0;
 
+		//Clears the screen
 		SDL_RenderClear(gRenderer);
+
+		//Updates all systems
 		asteroid_sys.update(reg, deltaTime, *this);
 		velocity_sys.update(reg, deltaTime);
 		mobility_sys.update(reg, deltaTime);
@@ -82,6 +92,7 @@ void SDL::GameLoop()
 		rotation_sys.update(reg, deltaTime);
 		sprite_sys.update(reg, gRenderer);
 
+		//Updates the screen
 		SDL_RenderPresent(gRenderer);
 	}
 	Close();
