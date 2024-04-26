@@ -8,6 +8,8 @@
 using entity = std::size_t;
 
 // mobility_system updates the position of entities based on their movement components
+// @param reg is the memory adress to the registry struct
+// @param deltatime is the time between frames
 struct mobility_system
 {
 	void update(registry& reg, double deltaTime)
@@ -43,6 +45,8 @@ struct mobility_system
 };
 
 // sprite_system renders the sprites of entities
+// @param reg is the memory adress to the registry struct
+// @param renderer is the SDL renderer used to render
 struct sprite_system
 {
 	void update(registry& reg, SDL_Renderer* renderer)
@@ -55,6 +59,8 @@ struct sprite_system
 };
 
 // controller_system updates the controller components based on user input
+// @param reg is the memory adress to the registry struct
+// @param e is the event variable used by SDL
 struct controller_system
 {
 	void update(registry& reg, SDL_Event& e)
@@ -100,6 +106,8 @@ struct controller_system
 };
 
 // velocity_system updates the position of entities based on their velocity components
+// @param reg is the memory adress to the registry struct
+// @param deltatime is the time between frames
 struct velocity_system
 {
 	void update(registry& reg, double deltaTime)
@@ -128,6 +136,8 @@ struct velocity_system
 };
 
 // rotation_system updates the rotation angle of entities
+// @param reg is the memory adress to the registry struct
+// @param deltatime is the time between frames
 struct rotation_system
 {
 	void update(registry& reg, double deltaTime)
@@ -145,6 +155,7 @@ struct rotation_system
 };
 
 // tracking_system updates the rotation angle of entities to track a target or the mouse
+// @param reg is the memory adress to the registry struct
 struct tracking_system
 {
 	void update(registry& reg)
@@ -177,6 +188,8 @@ struct tracking_system
 };
 
 // lifespan_system removes entities that have exceeded their lifespan
+// @param reg is the memory adress to the registry struct
+// @param deltatime is the time between frames
 struct lifespan_system
 {
 	void update(registry& reg, double deltaTime)
@@ -225,6 +238,7 @@ struct lifespan_system
 };
 
 // collision_system handles collisions between entities
+// @param reg is the memory adress to the registry struct
 struct collision_system
 {
 	void update(registry& reg)
@@ -296,6 +310,9 @@ struct collision_system
 };
 
 // asteroid_system spawns asteroids at regular intervals
+// @param reg is the memory adress to the registry struct
+// @param deltatime is the time between frames
+// @param sdl is the memory adress of the SDL class
 struct asteroid_system
 {
 	void update(registry& reg, double deltaTime, SDL& sdl)
@@ -327,6 +344,10 @@ struct asteroid_system
 };
 
 // input_system handles user input for player actions
+// @param reg is the memory adress to the registry struct
+// @param sdl is the memory adress of the SDL class
+// @param player is the id of the player entity
+// @param e is the event variable used by SDL
 struct input_system
 {
 	void update(registry& reg, entity player, SDL_Event& e, SDL& sdl)
