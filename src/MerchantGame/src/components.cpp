@@ -8,65 +8,90 @@ using entity = std::size_t;
 // sprite_component represents the visual aspect of an entity
 struct sprite_component
 {
-	SDL_FRect src;
-	SDL_Texture* texture;
-	float angle;
+    // src is the source rectangle of the texture to be rendered
+    SDL_FRect src;
+    // texture is the SDL_Texture to be rendered
+    SDL_Texture* texture;
+    // angle is the rotation angle of the texture
+    float angle;
 };
 
 // movement_component represents the movement properties of an entity
 struct movement_component
 {
-	float vel_x;
-	float vel_y;
-	float speed;
+    // vel_x is the horizontal velocity of the entity
+    float vel_x;
+    // vel_y is the vertical velocity of the entity
+    float vel_y;
+    // speed is the maximum speed of the entity
+    float speed;
 };
 
 // controller_component represents the user input for controlling an entity
 struct controller_component
 {
-	float controller_x;
-	float controller_y;
+    // controller_x is the horizontal input value from the controller
+    float controller_x;
+    // controller_y is the vertical input value from the controller
+    float controller_y;
 };
 
 // velocity_component represents the velocity and drag of an entity
 struct velocity_component
 {
-	float vel_x;
-	float vel_y;
-	float drag;
-	float speed;
+    // vel_x is the horizontal velocity of the entity
+    float vel_x;
+    // vel_y is the vertical velocity of the entity
+    float vel_y;
+    // drag is the drag coefficient of the entity
+    float drag;
+    // speed is the maximum speed of the entity
+    float speed;
 };
 
 // rotation_component represents the rotational deviation of an entity
 struct rotation_component
 {
-	float deviation;
+    // deviation is the rotational deviation of the entity
+    float deviation;
 };
 
 // tracking_component represents the target or mouse tracking behavior of an entity
 struct tracking_component
 {
-	entity target;
-	bool follow_mouse;
+    // target is the entity to be tracked
+    entity target;
+    // follow_mouse is a boolean indicating whether the entity should follow the mouse
+    bool follow_mouse;
 };
 
 // lifespan_component represents the remaining lifespan of an entity
 struct lifespan_component
 {
-	double lifespan;
+    // lifespan is the remaining lifespan of the entity
+    double lifespan;
 };
 
 // collision_component represents the collision tag of an entity
 struct collision_component
 {
-	char tag;
+    // tag is the collision tag of the entity
+    char tag;
 };
 
 // asteroid_component represents the spawning properties of asteroids
 struct asteroid_component
 {
-	double spawn_timer;
-	double spawn_delay;
-	float vel_x, vel_y;
-	float width, height;
+    // spawn_timer is the timer for spawning asteroids
+    double spawn_timer;
+    // spawn_delay is the delay between asteroid spawns
+    double spawn_delay;
+    // vel_x is the horizontal velocity of the asteroid
+    float vel_x;
+    // vel_y is the vertical velocity of the asteroid
+    float vel_y;
+    // width is the width of the asteroid
+    float width;
+    // height is the height of the asteroid
+    float height;
 };
