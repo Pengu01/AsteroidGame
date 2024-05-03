@@ -1,77 +1,69 @@
+# Asteroid Game
 
-# User Documentation
+Asteroid Game is a classic arcade-style game developed using SDL (Simple DirectMedia Layer) and following the Entity Component System (ECS) architecture. The game challenges players to survive as long as possible while avoiding and shooting down asteroids that continuously spawn. It offers an engaging and thrilling experience for players of all ages.
 
-## Comprehensive user documentation for the Asteroid Game
+## Table of Contents
 
-This section provides user documentation for the Asteroid Game, developed using SDL and following the Entity Component System (ECS) architecture. This guide aims to assist users in understanding, installing, and troubleshooting the game.
+- [Installation](#installation)
+- [Usage](#usage)
+- [Features](#features)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
----
+## Installation
 
-### User Documentation for Asteroid Game
+To install and run the Asteroid Game locally, follow these steps:
 
-___
+```bash
+git clone https://github.com/Pengu01/AsteroidGame.git
+cd AsteroidGame
+```
 
-#### Table of Contents
+Or install it through the github download button at https://github.com/Pengu01/AsteroidGame
 
-1. **[Installation Guide](#1-installation-guide)**
+After cloning the repository, you can run the executable file in the `bin` folder to start the game.
 
-2. **[User Manual](#2-user-manual)**
+## Usage
 
-3. **[FAQs and Troubleshooting](#3-faqs-and-troubleshooting)**
-
-4. **[Contact Information](#4-contact-information)**
-
----
-
-#### 1. Installation Guide
-
-
-- **Download Game Files**: 
-
--  Clone the [repository](https://github.com/Pengu01/AsteroidGame) somewhere on your computer.
-
-- **Running the Game**:
-
-- After cloning the repository, run the executable file in the bin folder to start the game.
-
----
-
-#### 2. User Manual
-
-- **Starting the Game**: The game will start automatically upon running the executable.
-
-- **Game Controls**:
+Once the game is launched, you can start playing immediately. Here are the controls:
 
 - Use the arrow keys or WASD keys to control the player's movement.
-
 - Press the spacebar to shoot bullets.
-
 - Hold the left shift key to switch between velocity-based and direct movement modes.
 
-- **Objective**: Survive as long as possible by avoiding collisions with asteroids while shooting them down.
+The objective of the game is to survive as long as possible by avoiding collisions with asteroids while shooting them down. Colliding with asteroids will result in a game over.
 
-- **Avoid**: Avoid collisions with the asteroids, as this will result in a game over.
+## Features
 
----
+- Classic arcade-style gameplay
+- Smooth player movement and controls
+- Asteroids continuously spawning to increase difficulty
+- Bullet shooting mechanic to destroy asteroids
+- Velocity-based and direct movement modes
+- Entity Component System (ECS) architecture for efficient game development
 
-#### 3. FAQs and Troubleshooting
+## Contributing
 
-- **Q: The game won't start. What should I do?**
+Contributions to the Asteroid Game project are welcome! If you find any issues or have suggestions for improvements, please submit an issue or a pull request on the [GitHub repository](https://github.com/Pengu01/AsteroidGame).
 
-- A: Make sure everything correctly installed, and all game files are in their correct directory. Check for any cloning errors and ensure proper handling of the required folders.
+To contribute, follow these steps:
 
-- **Q: How can I restart the game after losing?**
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-- A: Currently, the game does not support a restart feature. You need to relaunch the game to play again.
+## License
 
-- **Q: Is it possible to pause the game?**
+Distributed under the MIT License. See `LICENSE` for more information.
 
-- A: Currently, the game does not support a pause feature.
+## Contact
 
----
+Project Link: [https://github.com/Pengu01/AsteroidGame](https://github.com/Pengu01/AsteroidGame)
 
-#### 4. Contact Information
+## Acknowledgments
 
-For additional assistance, queries, or feedback, please reach out to the game developer. You can find their contact information on their github profile linked to the repository.
-
----
+- SDL (Simple DirectMedia Layer) for providing the game development framework
+- The Entity Component System (ECS) architecture for enabling efficient game development
