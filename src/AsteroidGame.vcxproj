@@ -78,9 +78,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(SolutionDir)..\lib\SDL;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)..\lib\SDL;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)..\build</OutDir>
+    <LibraryPath>$(SolutionDir)\lib\SDL;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\lib\SDL;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\build\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -124,7 +124,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)..\lib\SDL\SDL2.lib;$(SolutionDir)..\lib\SDL\SDL2main.lib;$(SolutionDir)..\lib\SDL\SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\lib\SDL\SDL2.lib;$(SolutionDir)\lib\SDL\SDL2main.lib;$(SolutionDir)\lib\SDL\SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,13 +144,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\components.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\SDL.cpp" />
-    <ClCompile Include="src\systems.cpp" />
+    <ClCompile Include="components.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SDL.cpp" />
+    <ClCompile Include="systems.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\SDL.h" />
+    <ClInclude Include="SDL.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

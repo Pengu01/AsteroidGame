@@ -20,8 +20,6 @@ git clone https://github.com/Pengu01/AsteroidGame.git
 cd AsteroidGame
 ```
 
-Or install it through the github download button at https://github.com/Pengu01/AsteroidGame
-
 After cloning the repository, you can run the executable file in the `bin` folder to start the game.
 
 ## Usage
